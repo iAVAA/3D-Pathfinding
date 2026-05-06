@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pathfinding 3D — Octree + A★ Θ★ D★ JPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div id="panel">
+  <div class="panel-header">
+    <h1>PATHFINDING 3D</h1>
+    <p>OCTREE · A★ · Θ★ · D★ · JPS</p>
+  </div>
+
+  <!-- ALGO SELECTOR -->
+  <div class="section">
+    <div class="section-title">// Algoritmo</div>
+    <div class="algo-tabs">
+      <button id="tab-astar"  class="algo-tab tab-astar  active" onclick="selectAlgo('astar')">
+        <span class="tab-dot" style="background:#ffe74c"></span>A★
+      </button>
+      <button id="tab-thetastar"  class="algo-tab tab-theta"         onclick="selectAlgo('thetastar')">
+        <span class="tab-dot" style="background:#00f5d4"></span>Θ★
+      </button>
+      <button id="tab-dstar"  class="algo-tab tab-dstar"         onclick="selectAlgo('dstar')">
+        <span class="tab-dot" style="background:#f72585"></span>D★
+      </button>
+      <button id="tab-jps"    class="algo-tab tab-jps"           onclick="selectAlgo('jps')">
+        <span class="tab-dot" style="background:#ff9f1c"></span>JPS
+      </button>
+    </div>
+    <div class="algo-desc">
+      <span id="desc-astar"     class="ad active">A*: euristica ammissibile, garantisce il percorso ottimo</span>
+      <span id="desc-thetastar" class="ad">Θ*: any-angle, path più corti grazie al line-of-sight</span>
+      <span id="desc-dstar"     class="ad">D* Lite: ricerca inversa (goal→start), robusto ai cambiamenti</span>
+      <span id="desc-jps"       class="ad">JPS: salta nodi ridondanti, molto più veloce di A*</span>
+    </div>
+  </div>
+
+  <!-- WORLD CONFIG -->
+  <div class="section">
+    <div class="section-title">// World Config</div>
+    <label>Dimensione griglia (N×N×N)</label>
+    <input type="number" id="worldSize" value="10" min="3" max="30">
+    <button class="btn btn-primary" onclick="applyWorld()" style="margin-top:8px">APPLICA MONDO</button>
+  </div>
+
+  <!-- OBSTACLES -->
+  <div class="section">
+    <div class="section-title">// Ostacoli</div>
+    <div class="coord-row">
+      <div><label>X</label><input type="number" id="ox" value="3" min="0"></div>
+      <div><label>Y</label><input type="number" id="oy" value="3" min="0"></div>
+      <div><label>Z</label><input type="number" id="oz" value="3" min="0"></div>
+    </div>
+    <button class="btn btn-primary" onclick="addObstacle()">+ AGGIUNGI OSTACOLO</button>
+    <div id="obstacleList"></div>
+    <button class="btn btn-danger" onclick="clearObstacles()" style="margin-top:8px">RIMUOVI TUTTI</button>
+  </div>
+
+  <!-- START -->
+  <div class="section">
+    <div class="section-title">// Start Point</div>
+    <div class="coord-row">
+      <div><label>X</label><input type="number" id="sx" value="0" min="0"></div>
+      <div><label>Y</label><input type="number" id="sy" value="0" min="0"></div>
+      <div><label>Z</label><input type="number" id="sz" value="0" min="0"></div>
+    </div>
+    <button class="btn btn-primary" onclick="setPoint('start')">SET START</button>
+  </div>
+
+  <!-- GOAL -->
+  <div class="section">
+    <div class="section-title">// Goal Point</div>
+    <div class="coord-row">
+      <div><label>X</label><input type="number" id="gx" value="9" min="0"></div>
+      <div><label>Y</label><input type="number" id="gy" value="9" min="0"></div>
+      <div><label>Z</label><input type="number" id="gz" value="9" min="0"></div>
+    </div>
+    <button class="btn btn-primary" onclick="setPoint('goal')">SET GOAL</button>
+  </div>
+
+  <!-- RUN -->
+  <div class="section">
+    <button class="btn btn-run"    id="runBtn"    onclick="runSelected()">▶ CALCOLA ALGORITMO</button>
+    <button class="btn btn-runall" id="runAllBtn" onclick="runAll()">⚡ ESEGUI TUTTI &amp; CONFRONTA</button>
+    <button class="btn btn-danger" onclick="clearPath()" style="margin-top:6px">✕ RESET PERCORSO</button>
+  </div>
+
+  <!-- COMPARISON -->
+  <div id="comparisonPanel" class="section" style="display:none"></div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#39ff14"></div>Start</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#ff3864"></div>Goal</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#ffe74c;border-radius:2px"></div>A*</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#00f5d4;border-radius:2px"></div>Θ*</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#f72585;border-radius:2px"></div>D*</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#ff9f1c;border-radius:2px"></div>JPS</div>
+  </div>
+
+  <!-- LOG -->
+  <div id="log">
+    <div class="log-title">// System Log</div>
+    <div id="logContent"></div>
+  </div>
+</div>
+
+<!-- CANVAS -->
+<div id="canvas-wrapper">
+  <div class="scan-line"></div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div id="hud">
+    WORLD: <span id="hudSize">10×10×10</span><br>
+    OBSTACLES: <span id="hudObs">0</span><br>
+    PATH: <span id="hudPath">—</span><br><br>
+    DRAG: ruota · SCROLL: zoom
+  </div>
+  <div id="pathStats"><span class="stat" id="statsText"></span></div>
+  <div id="loadingOverlay"><div class="spinner"></div><p>COMPUTING...</p></div>
+</div>
+
+<script src="../js/core/utils.js"></script>
+<script src="../js/core/octree.js"></script>
+<script src="../js/algorithms/astar.js"></script>
+<script src="../js/algorithms/thetastar.js"></script>
+<script src="../js/algorithms/dstar.js"></script>
+<script src="../js/algorithms/jps.js"></script>
+<script src="../js/app.js"></script>
+</body>
+</html>

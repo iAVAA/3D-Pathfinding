@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  pathfinding3d:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pathfinding3d
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
