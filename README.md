@@ -3,7 +3,9 @@
 An interactive web application to visualize and compare pathfinding algorithms in a 3D space. 
 This project allows you to create custom obstacles, set start and goal points, and execute different algorithms to find the optimal paths.
 
-![Application Screenshot](images/placeholder_image.png)
+<p align="center">
+  <img src="images/placeholder_image.png" width="200"/>
+</p>
 
 ## Features
 - **Interactive 3D Visualization:** Navigate the space, rotate the camera, and examine paths and obstacles in full 3D.
