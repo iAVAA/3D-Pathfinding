@@ -1,0 +1,36 @@
+/* ══════════════════════════════════════════════════════════════
+   BASE & VARIABLES
+   ══════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg:      #04060d;
+  --panel:   #080c18;
+  --border:  #0f3460;
+  --accent:  #00f5d4;
+  --accent2: #f72585;
+  --accent3: #7209b7;
+  --text:    #c0d4e8;
+  --dim:     #3a5068;
+
+  /* Algorithm path colours */
+  --c-astar: #ffe74c;
+  --c-theta: #00f5d4;
+  --c-dstar: #f72585;
+  --c-jps:   #ff9f1c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background:  var(--bg);
+  color:       var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  display:     flex;
+  height:      100vh;
+  overflow:    hidden;
+  font-size:   14px;
+}

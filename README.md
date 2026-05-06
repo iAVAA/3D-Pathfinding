@@ -1,95 +1,95 @@
 # 3D Pathfinding Visualizer
 
-Un'applicazione web interattiva per visualizzare e confrontare algoritmi di pathfinding in uno spazio 3D. 
-Il progetto permette di creare ostacoli personalizzati, impostare punti di partenza e di arrivo, ed eseguire gli algoritmi per trovare i percorsi migliori.
+An interactive web application to visualize and compare pathfinding algorithms in a 3D space. 
+This project allows you to create custom obstacles, set start and goal points, and execute different algorithms to find the optimal paths.
 
-![Screenshot dell'Applicazione](placeholder_image.png)
+![Application Screenshot](placeholder_image.png)
 
-## 📋 Funzionalità
-- **Visualizzazione 3D Interattiva:** Naviga nello spazio, ruota la visuale ed esamina le rotte e gli ostacoli in 3D.
-- **Griglia Personalizzabile:** Modifica le dimensioni del mondo (es. 10x10x10) e inserisci dinamicamente blocchi come ostacoli.
-- **Algoritmi Multipli:**
-  - **A***: L'algoritmo standard e bilanciato.
-  - **Theta***: A* ottimizzato con Line of Sight per traiettorie più naturali.
-  - **D* Lite**: Variante dinamica che si adatta alle modifiche, ideale per ambienti variabili.
-  - **JPS (Jump Point Search)**: Ottimizzazione per grid uniformi.
-- **Comparazione:** Confronta visivamente i percorsi e consulta i tempi di esecuzione e la quantità di passi in una comoda tabella.
-- **Tema Premium:** Interfaccia in stile "cyber/neon" scura, focalizzata sui dati e facile da leggere.
+## 📋 Features
+- **Interactive 3D Visualization:** Navigate the space, rotate the camera, and examine paths and obstacles in full 3D.
+- **Customizable Grid:** Modify the world size (e.g., 10x10x10) and dynamically place blocks as obstacles.
+- **Multiple Algorithms:**
+  - **A***: The standard and balanced pathfinding algorithm.
+  - **Theta***: An optimized A* variant with Line of Sight for more natural trajectories.
+  - **D* Lite**: A dynamic variant that adapts to environmental changes, ideal for variable settings.
+  - **JPS (Jump Point Search)**: A highly optimized algorithm for uniform grids.
+- **Comparison Tool:** Visually compare the generated paths and check execution times and step counts in a convenient table.
+- **Premium Theme:** A dark "cyber/neon" interface, data-focused and easy to read.
 
-## 🏗 Struttura del Progetto
+## 🏗 Project Structure
 
-Il progetto è stato refactorizzato per essere modulare e mantenibile:
+The project has been refactored to be modular and maintainable:
 
 ```text
 3D-Pathfinding/
-├── README.md                 # Questo file
-├── Dockerfile                # Configurazione per Docker
-├── docker-compose.yaml       # Orchestrazione container
-├── nginx.conf                # Configurazione server Nginx
+├── README.md                 # This file
+├── Dockerfile                # Docker configuration
+├── docker-compose.yaml       # Container orchestration
+├── nginx.conf                # Nginx server configuration
 ├── pages/
-│   └── index.html            # Entry point HTML dell'app
+│   └── index.html            # Main HTML entry point of the app
 ├── css/
-│   └── style.css             # Fogli di stile isolati
+│   └── style.css             # Isolated stylesheets
 └── js/
-    ├── app.js                # Logica principale UI e Three.js
+    ├── app.js                # Main UI logic and Three.js setup
     ├── core/
-    │   ├── utils.js          # Strutture dati condivise (MinHeap, distanze)
-    │   └── octree.js         # Classe per indicizzare lo spazio 3D e gestire collisioni
+    │   ├── utils.js          # Shared data structures (MinHeap, distance utilities)
+    │   └── octree.js         # Octree class for 3D space indexing and collision management
     └── algorithms/
-        ├── astar.js          # Implementazione A*
-        ├── thetastar.js      # Implementazione Theta*
-        ├── dstar.js          # Implementazione D* Lite
-        └── jps.js            # Implementazione Jump Point Search (3D)
+        ├── astar.js          # A* Implementation
+        ├── thetastar.js      # Theta* Implementation
+        ├── dstar.js          # D* Lite Implementation
+        └── jps.js            # Jump Point Search (3D) Implementation
 ```
 
-## 🚀 Come eseguire il progetto
+## 🚀 How to Run
 
-### Con Docker (Consigliato)
+### Using Docker (Recommended)
 
-1. Assicurati di avere [Docker](https://www.docker.com/) e `docker-compose` installati sul tuo sistema.
-2. Apri il terminale nella cartella root del progetto (`3D-Pathfinding`).
-3. Esegui il comando:
+1. Make sure you have [Docker](https://www.docker.com/) and `docker-compose` installed on your system.
+2. Open the terminal in the root directory of the project (`3D-Pathfinding`).
+3. Run the following command:
    ```bash
    docker-compose up --build -d
    ```
-4. Apri il browser e vai all'indirizzo: **http://localhost:80** (o la porta configurata in docker-compose).
-5. Per fermare il progetto:
+4. Open your browser and go to: **http://localhost:80** (or the port configured in your docker-compose file).
+5. To stop the project:
    ```bash
    docker-compose down
    ```
 
-### Senza Docker (In locale)
+### Without Docker (Local Development)
 
-Poiché il progetto utilizza moduli ES e file esterni, serve un web server locale per aggirare le restrizioni CORS sui protocolli `file://`.
-Puoi utilizzare estensioni di VSCode (es. **Live Server**) o un server rapido via terminale:
+Since the project uses ES modules and external files, you need a local web server to bypass CORS restrictions on `file://` protocols.
+You can use VSCode extensions (e.g., **Live Server**) or a quick terminal server:
 
-**Con Python:**
+**With Python:**
 ```bash
 python3 -m http.server 8000
-# Poi apri http://localhost:8000/pages/index.html
+# Then open http://localhost:8000/pages/index.html
 ```
 
-**Con Node.js (http-server):**
+**With Node.js (http-server):**
 ```bash
 npx http-server -p 8000
-# Poi apri http://localhost:8000/pages/index.html
+# Then open http://localhost:8000/pages/index.html
 ```
 
-## 📸 Immagini / Screenshots
+## 📸 Images / Screenshots
 
-*Di seguito puoi inserire gli screen della tua applicazione:*
+*You can insert your application screenshots below:*
 
-1. **Interfaccia Principale:**
+1. **Main Interface:**
    ![Main UI](placeholder_ui.png)
    
-2. **Confronto tra algoritmi:**
-   ![Confronto](placeholder_comparison.png)
+2. **Algorithm Comparison:**
+   ![Comparison](placeholder_comparison.png)
 
-3. **Dettaglio di un percorso generato:**
-   ![Dettaglio Percorso](placeholder_path.png)
+3. **Generated Path Detail:**
+   ![Path Detail](placeholder_path.png)
 
-## 🛠 Tecnologie Utilizzate
-- **HTML5 / CSS3** (Nessun framework CSS)
+## 🛠 Technologies Used
+- **HTML5 / CSS3** (No CSS frameworks)
 - **Vanilla JavaScript** (ES6+)
-- **[Three.js](https://threejs.org/)** (R128 per il rendering WebGL)
-- **Nginx & Docker** (Per il deployment)
+- **[Three.js](https://threejs.org/)** (R128 for WebGL rendering)
+- **Nginx & Docker** (For deployment)

@@ -1,0 +1,52 @@
+/* ══════════════════════════════════════════════════════════════
+   LAYOUT
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── SIDE PANEL ── */
+#panel {
+  width:      360px; /* Ingrandito per far spazio al testo più grande */
+  min-width:  360px;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display:        flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#panel::-webkit-scrollbar       { width: 6px; }
+#panel::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* ── 3D CANVAS AREA ── */
+#canvas-wrapper {
+  flex:       1;
+  position:   relative;
+  background: radial-gradient(ellipse at center, #060c1e 0%, #020409 100%);
+}
+
+canvas { display: block; }
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 800px) {
+  body {
+    flex-direction: column;
+  }
+  
+  #canvas-wrapper {
+    height: 45vh;
+    flex: none;
+    order: 1; /* Il canvas sta in alto nei dispositivi mobili */
+  }
+  
+  #panel {
+    width: 100%;
+    min-width: 100%;
+    height: 55vh;
+    flex: none;
+    order: 2; /* Il pannello comandi sta in basso */
+    border-right: none;
+    border-top: 2px solid var(--accent);
+  }
+}
