@@ -3,9 +3,9 @@
 An interactive web application to visualize and compare pathfinding algorithms in a 3D space. 
 This project allows you to create custom obstacles, set start and goal points, and execute different algorithms to find the optimal paths.
 
-![Application Screenshot](placeholder_image.png)
+![Application Screenshot](images/placeholder_image.png)
 
-## 📋 Features
+## Features
 - **Interactive 3D Visualization:** Navigate the space, rotate the camera, and examine paths and obstacles in full 3D.
 - **Customizable Grid:** Modify the world size (e.g., 10x10x10) and dynamically place blocks as obstacles.
 - **Multiple Algorithms:**
@@ -16,7 +16,7 @@ This project allows you to create custom obstacles, set start and goal points, a
 - **Comparison Tool:** Visually compare the generated paths and check execution times and step counts in a convenient table.
 - **Premium Theme:** A dark "cyber/neon" interface, data-focused and easy to read.
 
-## 🏗 Project Structure
+## Project Structure
 
 The project has been refactored to be modular and maintainable:
 
@@ -28,6 +28,7 @@ The project has been refactored to be modular and maintainable:
 ├── nginx.conf                # Nginx server configuration
 ├── pages/
 │   └── index.html            # Main HTML entry point of the app
+├── images/
 ├── css/
 │   └── style.css             # Isolated stylesheets
 └── js/
@@ -42,7 +43,7 @@ The project has been refactored to be modular and maintainable:
         └── jps.js            # Jump Point Search (3D) Implementation
 ```
 
-## 🚀 How to Run
+## How to Run
 
 ### Using Docker (Recommended)
 
@@ -75,20 +76,15 @@ npx http-server -p 8000
 # Then open http://localhost:8000/pages/index.html
 ```
 
-## 📸 Images / Screenshots
-
-*You can insert your application screenshots below:*
+## Images / Screenshots
 
 1. **Main Interface:**
-   ![Main UI](placeholder_ui.png)
+   ![Main Interface](images/path_test.png)
    
 2. **Algorithm Comparison:**
-   ![Comparison](placeholder_comparison.png)
+   ![Algorithm Comparison](images/algorithm_comparison.png)
 
-3. **Generated Path Detail:**
-   ![Path Detail](placeholder_path.png)
-
-## 🛠 Technologies Used
+## Technologies Used
 - **HTML5 / CSS3** (No CSS frameworks)
 - **Vanilla JavaScript** (ES6+)
 - **[Three.js](https://threejs.org/)** (R128 for WebGL rendering)

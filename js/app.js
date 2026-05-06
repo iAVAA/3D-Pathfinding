@@ -235,15 +235,15 @@ function selectAlgo(key) {
 	if (res && res.path && res.path.length > 1) {
 		buildPathMesh(res.path, key);
 		const len = res.path.length - 1;
-		document.getElementById('hudPath').textContent = len + ' passi';
+		document.getElementById('hudPath').textContent = len + ' steps';
 		document.getElementById('pathStats').style.display = 'block';
-		document.getElementById('statsText').textContent = `[${ALGO_CFG[key].name}]  ${len} PASSI  ·  ${res.time}ms`;
+		document.getElementById('statsText').textContent = `[${ALGO_CFG[key].name}]  ${len} STEPS  ·  ${res.time}ms`;
 	} else if (Object.keys(allResults).length > 0) {
 		while (grp.path.children.length) grp.path.remove(grp.path.children[0]);
 		while (grp.pathBalls.children.length) grp.pathBalls.remove(grp.pathBalls.children[0]);
 		document.getElementById('hudPath').textContent = 'N/A';
 		document.getElementById('pathStats').style.display = 'block';
-		document.getElementById('statsText').textContent = `[${ALGO_CFG[key].name}]  NESSUN PERCORSO  ·  ${res ? res.time : '?'}ms`;
+		document.getElementById('statsText').textContent = `[${ALGO_CFG[key].name}]  NO PATH FOUND  ·  ${res ? res.time : '?'}ms`;
 	}
 
 	renderComparison();
@@ -270,9 +270,9 @@ function renderComparison() {
 	}
 
 	let html = `
-    <div class="cmp-title">// Confronto Algoritmi</div>
+    <div class="cmp-title">// Algorithm Comparison</div>
     <table class="cmp-table">
-      <thead><tr><th>Algoritmo</th><th>Tempo</th><th>Passi</th><th>Ok</th></tr></thead>
+      <thead><tr><th>Algorithm</th><th>Time</th><th>Steps</th><th>Ok</th></tr></thead>
       <tbody>
   `;
 
@@ -306,14 +306,14 @@ function runAll() { runAlgos(Object.keys(ALGO_FNS)); }
 
 function runAlgos(keys) {
 	if (H(startPt.x, startPt.y, startPt.z, goalPt.x, goalPt.y, goalPt.z) < 0.5) {
-		log('Start e Goal coincidono!', 'log-err');
+		log('Start and Goal overlap!', 'log-err');
 		return;
 	}
 
 	document.getElementById('loadingOverlay').style.display = 'flex';
 	document.getElementById('runBtn').disabled = true;
 	document.getElementById('runAllBtn').disabled = true;
-	log('Calcolo: ' + keys.map(k => ALGO_CFG[k].name).join(', ') + '…', 'log-info');
+	log('Computing: ' + keys.map(k => ALGO_CFG[k].name).join(', ') + '...', 'log-info');
 
 	setTimeout(() => {
 		const oct = new Octree(worldSize);
@@ -325,7 +325,7 @@ function runAlgos(keys) {
 			try { path = ALGO_FNS[key](startPt, goalPt, oct); } catch (e) { console.error(key, e); }
 			const ms = parseFloat((performance.now() - t0).toFixed(2));
 			allResults[key] = { path, time: ms };
-			log(`${ALGO_CFG[key].name}: ${path ? path.length - 1 + ' passi' : 'nessun percorso'} in ${ms}ms`, path ? 'log-ok' : 'log-err');
+			log(`${ALGO_CFG[key].name}: ${path ? path.length - 1 + ' steps' : 'no path found'} in ${ms}ms`, path ? 'log-ok' : 'log-err');
 		}
 
 		document.getElementById('loadingOverlay').style.display = 'none';
@@ -335,9 +335,9 @@ function runAlgos(keys) {
 		const res = allResults[currentAlgo];
 		if (res && res.path && res.path.length > 1) {
 			buildPathMesh(res.path, currentAlgo);
-			document.getElementById('hudPath').textContent = res.path.length - 1 + ' passi';
+			document.getElementById('hudPath').textContent = res.path.length - 1 + ' steps';
 			document.getElementById('pathStats').style.display = 'block';
-			document.getElementById('statsText').textContent = `[${ALGO_CFG[currentAlgo].name}]  ${res.path.length - 1} PASSI  ·  ${res.time}ms`;
+			document.getElementById('statsText').textContent = `[${ALGO_CFG[currentAlgo].name}]  ${res.path.length - 1} STEPS  -  ${res.time}ms`;
 		} else {
 			while (grp.path.children.length) grp.path.remove(grp.path.children[0]);
 			while (grp.pathBalls.children.length) grp.pathBalls.remove(grp.pathBalls.children[0]);
@@ -355,7 +355,7 @@ function runAlgos(keys) {
 
 function applyWorld() {
 	const n = parseInt(document.getElementById('worldSize').value);
-	if (isNaN(n) || n < 3 || n > 30) { log('Dimensione non valida (3-30)', 'log-err'); return; }
+	if (isNaN(n) || n < 3 || n > 30) { log('Invalid size (3-30)', 'log-err'); return; }
 
 	worldSize = n;
 	obstacles = [];
@@ -374,9 +374,9 @@ function applyWorld() {
 	updateObsList();
 	spherical.r = n * 2.8;
 	updateCamera();
-	document.getElementById('hudSize').textContent = `${n}×${n}×${n}`;
+	document.getElementById('hudSize').textContent = `${n} * ${n} * ${n}`;
 	document.getElementById('hudPath').textContent = '—';
-	log(`Mondo ${n}×${n}×${n} inizializzato`, 'log-ok');
+	log(`World ${n} * ${n} * ${n} initialized`, 'log-ok');
 }
 
 function addObstacle() {
@@ -385,20 +385,20 @@ function addObstacle() {
 	const z = parseInt(document.getElementById('oz').value);
 
 	if ([x, y, z].some(v => isNaN(v) || v < 0 || v >= worldSize)) {
-		log(`Coordinate fuori dai limiti [0, ${worldSize - 1}]`, 'log-err'); return;
+		log(`Coordinates out of bounds [0, ${worldSize - 1}]`, 'log-err'); return;
 	}
 	if (obstacles.some(o => o.x === x && o.y === y && o.z === z)) {
-		log('Ostacolo già presente', 'log-err'); return;
+		log('Obstacle already exists at this position', 'log-err'); return;
 	}
 	if ((x === startPt.x && y === startPt.y && z === startPt.z) ||
 		(x === goalPt.x && y === goalPt.y && z === goalPt.z)) {
-		log('Non puoi piazzare un ostacolo su start/goal', 'log-err'); return;
+		log('Cannot place an obstacle on start/goal', 'log-err'); return;
 	}
 
 	obstacles.push({ x, y, z });
 	rebuildObsMeshes();
 	updateObsList();
-	log(`Ostacolo aggiunto (${x}, ${y}, ${z})`, 'log-ok');
+	log(`Obstacle added (${x}, ${y}, ${z})`, 'log-ok');
 	clearPath();
 }
 
@@ -407,7 +407,7 @@ function removeObstacle(i) {
 	obstacles.splice(i, 1);
 	rebuildObsMeshes();
 	updateObsList();
-	log(`Ostacolo rimosso (${o.x}, ${o.y}, ${o.z})`, 'log-info');
+	log(`Obstacle removed (${o.x}, ${o.y}, ${o.z})`, 'log-info');
 	clearPath();
 }
 
@@ -415,7 +415,7 @@ function clearObstacles() {
 	obstacles = [];
 	rebuildObsMeshes();
 	updateObsList();
-	log('Tutti gli ostacoli rimossi', 'log-info');
+	log('All obstacles cleared', 'log-info');
 	clearPath();
 }
 
@@ -439,10 +439,10 @@ function setPoint(type) {
 	const z = parseInt(document.getElementById(pz).value);
 
 	if ([x, y, z].some(v => isNaN(v) || v < 0 || v >= worldSize)) {
-		log('Coordinate fuori dai limiti', 'log-err'); return;
+		log('Coordinates out of bounds', 'log-err'); return;
 	}
 	if (obstacles.some(o => o.x === x && o.y === y && o.z === z)) {
-		log(`${type === 'start' ? 'Start' : 'Goal'}: coincide con un ostacolo!`, 'log-err'); return;
+		log(`${type === 'start' ? 'Start' : 'Goal'}: overlaps with an obstacle!`, 'log-err'); return;
 	}
 
 	if (type === 'start') startPt = { x, y, z };
@@ -505,6 +505,6 @@ function animate() {
 
 applyWorld();
 selectAlgo('astar');
-log('Sistema inizializzato', 'log-ok');
-log('Seleziona algoritmo e premi ▶', 'log-info');
+log('System initialized', 'log-ok');
+log('Select an algorithm and press ▶', 'log-info');
 animate();
