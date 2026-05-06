@@ -52,7 +52,7 @@ The project has been refactored to be modular and maintainable:
    ```bash
    docker-compose up --build -d
    ```
-4. Open your browser and go to: **http://localhost:80** (or the port configured in your docker-compose file).
+4. Open your browser and go to: **http://localhost:8080** (or the port configured in your docker-compose file).
 5. To stop the project:
    ```bash
    docker-compose down
